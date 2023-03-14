@@ -2,7 +2,7 @@ import requests ,os.path,json
 from configparser import ConfigParser
 parser = ConfigParser()
 
-parser.read('config.ini')
+parser.read('src/config.ini')
 
 PARAMS = {'api_key': str(parser.get('riot_api', 'api_key'))}
 

@@ -12,3 +12,4 @@ class GameEnd:
         data = Riot_Extract_Data_End_Game(gameID)
         #Attribution des données
         self.gameDuration = int(data['info']["gameDuration"]) #Attribution de la durée de la game en seconde
+        
