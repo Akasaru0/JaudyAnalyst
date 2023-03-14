@@ -3,7 +3,7 @@ class PlayerEnd:
     Elle représente les données de fin de games pour un joueur
     """
     def __init__(self,dataJson:dict,gameDuration:int):
-        #Attribution de l'id riot du joueur
+
         self.id = dataJson['puuid']
         self.setSummonerName(dataJson['summonerName'])   
         self.setPosition(dataJson['lane'],dataJson['individualPosition'])
