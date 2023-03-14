@@ -99,6 +99,7 @@ class PlayerEnd:
         self.creepPerMin = format(60*self.totalCreepKilled/gameDuration, '.1f')
 
     def __str__(self):
+        #fonction to string
         return f"Summoner Name: {self.summonerName}\n" \
                f"ID: {self.id}\n" \
                f"Champion: {self.championName}\n" \
