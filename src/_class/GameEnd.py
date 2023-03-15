@@ -28,8 +28,8 @@ class GameEnd:
         if side == 'B':
             for i in range(0,5):
                 if(self.player[i].individualPosition == position):
-                    print(self.player[i])
+                    return self.player[i]
         if side == 'R':
             for i in range(6,10):
                 if(self.player[i].individualPosition == position):
-                    print(self.player[i])
+                    return self.player[i]
