@@ -3,7 +3,7 @@ class PlayerEnd:
     Elle représente les données de fin de games pour un joueur
     """
     def __init__(self,dataJson:dict,gameDuration:int):
-        #Attribution de l'id riot du joueur
+
         self.id = dataJson['puuid']
         self.setSummonerName(dataJson['summonerName'])   
         self.setPosition(dataJson['lane'],dataJson['individualPosition'])
@@ -13,7 +13,7 @@ class PlayerEnd:
         self.setDamagesTurret(dataJson['damageDealtToTurrets'])
         self.setTotalDamaged(dataJson['totalDamageDealtToChampions'],dataJson['totalDamageTaken'])
         self.setWards(dataJson['wardsPlaced'],dataJson['wardsKilled'],dataJson['visionWardsBoughtInGame'],dataJson['detectorWardsPlaced'])
-        self.setVisionScore(dataJson['visionScore'])
+        self.setVisionScore(dataJson['visionScore'],gameDuration)
         self.setGold(dataJson['goldEarned'],dataJson['goldSpent'])
         self.setTotalCreep(dataJson['totalMinionsKilled'],dataJson['neutralMinionsKilled'])
         self.setKillParticipation(dataJson['challenges']['killParticipation'])
@@ -71,9 +71,10 @@ class PlayerEnd:
         #Attribution du nombre de controls ward posées
         self.detectorWardsPlaced = detectorWardsPlaced
     
-    def setVisionScore(self,visionScore:int):
+    def setVisionScore(self,visionScore:int,gameDuration:int):
         #Attribution du score de vision
         self.visionScore = visionScore
+        self.visionScorePerMin = format(60*self.visionScore/gameDuration, '.1f')
 
     def setGold(self,goldEarned:int,goldSpent:int):
         #Attribution du montant de gold gagné
@@ -99,6 +100,7 @@ class PlayerEnd:
         self.creepPerMin = format(60*self.totalCreepKilled/gameDuration, '.1f')
 
     def __str__(self):
+        #fonction to string
         return f"Summoner Name: {self.summonerName}\n" \
                f"ID: {self.id}\n" \
                f"Champion: {self.championName}\n" \
@@ -118,8 +120,42 @@ class PlayerEnd:
                f"Vision wards bought in game: {self.visionWardsBoughtInGame}\n" \
                f"Detector wards placed: {self.detectorWardsPlaced}\n" \
                f"Vision score: {self.visionScore}\n" \
+               f"Vision score/min: {self.visionScorePerMin}\n"\
                f"Gold earned: {self.goldEarned}\n" \
                f"Gold spent: {self.goldSpent}\n" \
+               f"Total minion killed: {self.totalMinionsKilled}\n" \
+                f"Total neutralMinons killed: {self.neutralMinionsKilled}\n" \
                f"Total creep killed: {self.totalCreepKilled}\n" \
                f"Creep per minute: {self.creepPerMin}\n" \
-               f"Kill participation: {self.killParticipation}%"
+               f"Kill participation: {self.killParticipation}%\n"
+    
+    def getPlayerInfo(self):
+        info = {
+            'summonner_name' : str(self.summonerName),
+            'id' : str(self.id),
+            'champion' : str(self.championName),
+            'lane' : str(self.lane),
+            'Position' : str(self.individualPosition),
+            'lvl' : str(self.lvl),
+            'kills' : str(self.kills),
+            'deaths' : str(self.deaths),
+            'assists' : str(self.assists),
+            'damageToObjective' : str(self.damageDealtToObjectives),
+            'damageToTurrets' : str(self.damageDealtToTurrets),
+            'damageTaken' : str(self.totalDamageTaken),
+            'wardsPlaced' : str(self.wardsPlaced),
+            'wardsKilled' : str(self.wardsKilled),
+            'visionWardsBoughtInGame' : str(self.visionWardsBoughtInGame),
+            'detectorWardsPlaced' : str(self.detectorWardsPlaced),
+            'visionScore' : str(self.visionScore),
+            'visionScorePerMin' : str(self.visionScorePerMin),
+            'goldEarned' : str(self.goldEarned),
+            'goldSpent' : str(self.goldSpent),
+            'totalMinionsKilled' : str(self.totalMinionsKilled),
+            'neutralMinionsKilled' : str(self.neutralMinionsKilled),
+            'totalCreepKilled' : str(self.totalCreepKilled),
+            'creepPerMin' : str(self.creepPerMin),
+            'killParticipation' : str(self.killParticipation),
+        }
+        return info
+        
