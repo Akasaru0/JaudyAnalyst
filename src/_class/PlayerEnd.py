@@ -18,6 +18,7 @@ class PlayerEnd:
         self.setTotalCreep(dataJson['totalMinionsKilled'],dataJson['neutralMinionsKilled'])
         self.setKillParticipation(dataJson['challenges']['killParticipation'])
         self.setCreepPerMin(gameDuration)
+        self.setDamagePerGold(dataJson['totalDamageDealtToChampions'],dataJson['goldSpent'])
     
     
     def setSummonerName(self,summonerName:str):
@@ -99,9 +100,12 @@ class PlayerEnd:
         #Attribution des valeurs de kill participation
         self.creepPerMin = format(60*self.totalCreepKilled/gameDuration, '.1f')
 
+    def setDamagePerGold(self,totalDamageDealtToChampions:str,goldSpent:str):
+        self.damagePerGold = format(totalDamageDealtToChampions/goldSpent,'.2f')
+
     def __str__(self):
         #fonction to string
-        return f"Summoner Name: {self.summonerName}\n" \
+        return f"Summoner Name: {self.summonerName.encode('utf-8')}\n" \
                f"ID: {self.id}\n" \
                f"Champion: {self.championName}\n" \
                f"Lane: {self.lane}\n" \
@@ -123,6 +127,7 @@ class PlayerEnd:
                f"Vision score/min: {self.visionScorePerMin}\n"\
                f"Gold earned: {self.goldEarned}\n" \
                f"Gold spent: {self.goldSpent}\n" \
+               f"Damage Per Gold {self.damagePerGold}\n"\
                f"Total minion killed: {self.totalMinionsKilled}\n" \
                 f"Total neutralMinons killed: {self.neutralMinionsKilled}\n" \
                f"Total creep killed: {self.totalCreepKilled}\n" \
@@ -142,6 +147,7 @@ class PlayerEnd:
             'assists' : str(self.assists),
             'damageToObjective' : str(self.damageDealtToObjectives),
             'damageToTurrets' : str(self.damageDealtToTurrets),
+            'totalDamageDealtToChampions' : str(self.totalDamageDealtToChampions),
             'damageTaken' : str(self.totalDamageTaken),
             'wardsPlaced' : str(self.wardsPlaced),
             'wardsKilled' : str(self.wardsKilled),

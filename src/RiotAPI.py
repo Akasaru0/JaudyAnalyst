@@ -29,8 +29,7 @@ def load_data_in_database(Gameid,type):
     elif type == 'end':
         with open("database/end_game/EUW1_"+str(Gameid)+".json") as json_file:
             data = json.load(json_file)
-            return data        
-   
+            return data         
 
 def Riot_Extract_Data_End_Game(Gameid):
     #Checking in database
@@ -85,3 +84,11 @@ def Riot_Get_Username(id):
     query_summoner = response_summoner.json()
     return query_summoner[0]['summonerName']
 
+def findChampionWithId(id:int):
+    responce_version = requests.get(url = str(parser.get('url', 'url_version')))
+    version = (responce_version.json())[0] #récupération de la dernière version
+    responce_champions = requests.get(url = 'https://ddragon.leagueoflegends.com/cdn/'+version+'/data/en_US/champion.json')
+    data = responce_champions.json()
+    for champion in data['data']:
+        if(data['data'][champion]['key']==str(119)):
+            return champion
