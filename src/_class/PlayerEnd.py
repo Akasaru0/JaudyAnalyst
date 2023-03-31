@@ -20,7 +20,6 @@ class PlayerEnd:
         self.setCreepPerMin(gameDuration)
         self.setDamagePerGold(dataJson['totalDamageDealtToChampions'],dataJson['goldSpent'])
     
-    
     def setSummonerName(self,summonerName:str):
         #Attribution du nom d'invocateur
         self.summonerName = summonerName

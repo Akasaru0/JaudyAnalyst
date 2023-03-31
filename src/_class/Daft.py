@@ -12,7 +12,8 @@ class Draft:
                 },
                 "bans":{
             
-                }
+                },
+                "win":False
             },
             "red":{
                 "picks":{
@@ -20,13 +21,20 @@ class Draft:
                 },
                 "bans":{
             
-                }        
+                },
+                "win":False        
             }
         }
     def setTeamName(self,TeamBlue:str,TeamRed:str):
         self.draft["blue"]["team"] = TeamBlue
         self.draft["red"]["team"] =  TeamRed
 
+    def setWin(self,side:str):
+        if side == "B":
+            self.draft["blue"]["win"] = True
+        if side == "R":
+            self.draft["red"]["win"] = True
+            
     def setPick(self,side:str,champion):
         if side == 'B':
             for i in range(0,5):

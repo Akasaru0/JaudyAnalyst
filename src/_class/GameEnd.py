@@ -30,14 +30,14 @@ class GameEnd:
         self.recupKillsTotaux()
         self.recupDamagesTotaux()
         
-    
+    #Elle permet de retourner les données d'un joueur en fonction d'une postion et d'un side
     def recupDataJoueur(self,position:str,side:str):
         if position in ['TOP','JUNLGE','MIDDLE','CARRY','UTILITY']:
-            if side == 'B':
+            if side == 'B' and side == "BLUE":
                 for i in range(0,5):
                     if(self.player[i].individualPosition == position):
                         return self.player[i]
-            elif side == 'R':
+            elif side == 'R' and side == "RED":
                 for i in range(6,10):
                     if(self.player[i].individualPosition == position):
                         return self.player[i]
