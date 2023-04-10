@@ -1,4 +1,4 @@
-class PlayerEnd:
+class Player:
     """
     Elle représente les données de fin de games pour un joueur
     """
@@ -19,6 +19,7 @@ class PlayerEnd:
         self.setKillParticipation(dataJson['challenges']['killParticipation'])
         self.setCreepPerMin(gameDuration)
         self.setDamagePerGold(dataJson['totalDamageDealtToChampions'],dataJson['goldSpent'])
+
     
     def setSummonerName(self,summonerName:str):
         #Attribution du nom d'invocateur
@@ -93,7 +94,7 @@ class PlayerEnd:
 
     def setKillParticipation(self,killParticipation:float):
         #Attribution des valeurs de kill participation
-        self.killParticipation = format(killParticipation*100, '.0f')
+        self.killParticipation = format(killParticipation, '.4f')
 
     def setCreepPerMin(self,gameDuration:int):
         #Attribution des valeurs de kill participation
