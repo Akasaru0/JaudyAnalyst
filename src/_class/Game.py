@@ -1,11 +1,12 @@
 from RiotAPI import Riot_Extract_Data_End_Game
 from _class.Player import Player
+import requests
 
 class Game:
     """
     Elle représente les données de fin de games
     """
-    def __init__(self,gameID:int,win:int=None,teamBlue:str=None,teamRed:str=None):
+    def __init__(self,gameID:int,teamBlue:str=None,teamRed:str=None):
         # Récupération des données via l'api Riot
         data = Riot_Extract_Data_End_Game(gameID)
         self.gameID = gameID
@@ -26,10 +27,38 @@ class Game:
         if (teamBlue != None and teamRed != None):
             self.teamBlue = teamBlue
             self.teamRed = teamRed
-        self.win = win
+        
         self.recupKDATotaux()
         self.recupDamagesTotaux()
-        
+
+        # Récupération de la variable win
+        if data["info"]['teams'][0]["win"]:
+            self.win = "B"
+        else:
+            self.win = "R"
+
+        # Récupération du frist blood
+        if data["info"]['teams'][0]["objectives"]["champion"]["first"]:
+            self.firstblood_blue = True
+            self.firstblood_red = False
+        else:
+            self.firstblood_blue = False
+            self.firstblood_red = True
+        #récupération des bans
+         
+        version = (requests.get("https://ddragon.leagueoflegends.com/api/versions.json")).json()
+        champ_data = requests.get('https://ddragon.leagueoflegends.com/cdn/'+version[0]+'/data/en_US/champion.json').json()
+        self.bans_blue = []
+        self.bans_red = []
+        for i in range(0,5):
+            id_champ_blue = data["info"]['teams'][0]['bans'][i]["championId"]
+            id_champ_red = data["info"]['teams'][1]['bans'][i]["championId"]
+            for champs in champ_data["data"]:
+                if champ_data["data"][champs]["key"] == str(id_champ_blue):
+                    self.bans_blue.append(champs)
+                if champ_data["data"][champs]["key"] == str(id_champ_red):
+                    self.bans_red.append(champs)
+
     #Elle permet de retourner les données d'un joueur en fonction d'une postion et d'un side
     def recupDataJoueur(self,position:str,side:str):
         if position in ['TOP','JUNLGE','MIDDLE','CARRY','UTILITY']:

@@ -3,9 +3,17 @@ from _class.Game import *
 from _class.Daft import *
 from RiotAPI import *
 from DataAnalyse import *
-from AddSupabase import *
+from PlayWithSupabase import *
 
 #game1 = GameEnd(6317145488)
-game1 = Game(6300818823,teamBlue='Bluereal',teamRed='BDS',win='B')
+#add_kills_position_supabase(6322721766,Game(6322721766,teamBlue='Bluereal',teamRed='BDS'))
+add_value_supabase(Game(6358084788,teamBlue='',teamRed='Bluereal'))
+# add_value_supabase(Game(6328369266,teamBlue='BDS',teamRed='Bluereal'))
+# add_value_supabase(Game(6300818823,teamBlue='Bluereal',teamRed='BDS'))
+# version = (requests.get("https://ddragon.leagueoflegends.com/api/versions.json")).json()
+# champ_data = requests.get('https://ddragon.leagueoflegends.com/cdn/'+version[0]+'/data/en_US/champion.json').json()
 
-add_value_supabase(game1)
+# for champs in champ_data["data"]:
+#     if champ_data["data"][champs]["key"] == str(103):
+#         print("alalalall")s
+#         break
