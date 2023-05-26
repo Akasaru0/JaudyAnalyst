@@ -1,7 +1,7 @@
 from RiotAPI import Riot_Extract_Data_End_Game , Riot_Extract_Timeline_Game
 from _class.Player import Player
 from _class.Kills import Kill
-import requests
+import requests,datetime
 
 class Game:
     """
@@ -14,6 +14,10 @@ class Game:
 
         #Attribution du game id de la partie
         self.gameID = gameID
+
+        #Attribution de la date
+        date_time = datetime.datetime.fromtimestamp(data_end['gameCreation'])
+        self.date = date_time.strftime('%Y-%m-%d %H:%M:%S')
         
         #Attribution de la durée de la game en seconde
         self.gameDuration = int(data_end['info']['gameDuration'])
