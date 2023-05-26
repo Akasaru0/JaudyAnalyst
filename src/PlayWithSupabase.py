@@ -45,6 +45,7 @@ def add_kills_position_supabase(game_id,game):
                             elif k>=5 and k<=10:
                                 data["killer_side"] = "R"
                     try:
+                        print("add "+str(data))
                         supabase.table('position_kills').insert(data).execute()
                     except:
                         pass
@@ -110,6 +111,6 @@ def add_value_supabase(game):
         data["gold_spend"] = player.goldSpent
         data["damage_gold"] = player.damagePerGold
         supabase.table('players').insert(data).execute()
-    #add_kills_position_supabase(game.gameID,game)
+    add_kills_position_supabase(game.gameID,game)
 # data = supabase.table("games").insert({'id':123121412}).execute()
 # print(data)

@@ -1,5 +1,6 @@
-from RiotAPI import Riot_Extract_Data_End_Game
+from RiotAPI import Riot_Extract_Data_End_Game , Riot_Extract_Timeline_Game
 from _class.Player import Player
+from _class.Kills import Kill
 import requests
 
 class Game:
@@ -8,51 +9,95 @@ class Game:
     """
     def __init__(self,gameID:int,teamBlue:str=None,teamRed:str=None):
         # Récupération des données via l'api Riot
-        data = Riot_Extract_Data_End_Game(gameID)
+        data_end = Riot_Extract_Data_End_Game(gameID)
+        data_time = Riot_Extract_Timeline_Game(gameID)
+
+        #Attribution du game id de la partie
         self.gameID = gameID
         
         #Attribution de la durée de la game en seconde
-        self.gameDuration = int(data['info']['gameDuration'])
+        self.gameDuration = int(data_end['info']['gameDuration'])
 
         #Variable du tableau de joueur
         self.player = []
 
         #Attribution des joueurs dans la game.
         for i in range(0,10):
-            dataJson = data['info']['participants'][i]
+            data_end_json = data_end['info']['participants'][i]
             #print(PlayerEnd(dataJson,self.gameDuration))
-            self.player.append(Player(dataJson,self.gameDuration))     
+            self.player.append(Player(data_end_json,self.gameDuration))     
 
         #Attribution des noms de team
         if (teamBlue != None and teamRed != None):
             self.teamBlue = teamBlue
             self.teamRed = teamRed
+        else:
+            self.teamBlue = None
+            self.teamRed = None
         
         self.recupKDATotaux()
         self.recupDamagesTotaux()
 
         # Récupération de la variable win
-        if data["info"]['teams'][0]["win"]:
+        if data_end["info"]['teams'][0]["win"]:
             self.win = "B"
         else:
             self.win = "R"
 
         # Récupération du frist blood
-        if data["info"]['teams'][0]["objectives"]["champion"]["first"]:
+        if data_end["info"]['teams'][0]["objectives"]["champion"]["first"]:
             self.firstblood_blue = True
             self.firstblood_red = False
         else:
             self.firstblood_blue = False
             self.firstblood_red = True
-        #récupération des bans
-         
+        
+        self.recup_bans_team(data_end["info"]["teams"])
+        self.set_kill_position(data_time)
+        # for i in range(0,len(self.kills)):
+        #     print(self.kills[i])
+    
+    #Fonction de création d'object kill.
+    def set_kill_position(self,dataJson):
+        self.kills = []
+        for i in range(0,len(dataJson["info"]["frames"])):
+            data_frames = dataJson["info"]["frames"][i]
+            for j in range(0,len(data_frames["events"])):
+                data_event = data_frames["events"][j]
+                if data_event["type"] == "CHAMPION_KILL":
+
+                    victim = ""
+                    killer = ""
+                    #get the killer and victim player object
+                    for k in range(0,len(self.player)):
+                        if self.player[k].id == dataJson["metadata"]["participants"][int(data_event["killerId"]-1)]:
+                            killer = self.player[k]
+                        if self.player[k].id == dataJson["metadata"]["participants"][int(data_event["victimId"]-1)]:
+                            victim = self.player[k]
+                    
+                    #get all the assist
+                    assist = []
+                    if "assistingParticipantIds" in data_event:
+                        for id_assist in data_event["assistingParticipantIds"]:
+                            for k in range(0,len(self.player)):
+                                if self.player[k].id == id_assist:
+                                    assist.append(self.player[k])
+                    if len(assist) != 0:
+                        self.kills.append(Kill(victim,killer,data_event["position"]["x"],data_event["position"]["y"],assists=assist))
+                    else:
+                        self.kills.append(Kill(victim,killer,data_event["position"]["x"],data_event["position"]["y"]))
+
+    #Récuperation des bans des différentes teams
+    def recup_bans_team(self, dataJson):
+        #Récuperation du patch actuel
         version = (requests.get("https://ddragon.leagueoflegends.com/api/versions.json")).json()
+        #Récuperation du dictionnaire contetant les informations des champions
         champ_data = requests.get('https://ddragon.leagueoflegends.com/cdn/'+version[0]+'/data/en_US/champion.json').json()
         self.bans_blue = []
         self.bans_red = []
         for i in range(0,5):
-            id_champ_blue = data["info"]['teams'][0]['bans'][i]["championId"]
-            id_champ_red = data["info"]['teams'][1]['bans'][i]["championId"]
+            id_champ_blue = dataJson[0]['bans'][i]["championId"]
+            id_champ_red = dataJson[1]['bans'][i]["championId"]
             for champs in champ_data["data"]:
                 if champ_data["data"][champs]["key"] == str(id_champ_blue):
                     self.bans_blue.append(champs)
