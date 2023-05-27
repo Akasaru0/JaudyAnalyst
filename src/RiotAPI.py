@@ -76,6 +76,13 @@ def Riot_Get_UserId(username):
     query_pseudo = response_pseudo.json()
     return query_pseudo['puuid']
 
+def Riot_Get_Rank(id):
+    url = str(parser.get('riot_url', 'url_id_rank'))+str(id)
+    response_pseudo = requests.get(url = url, params = PARAMS)
+    #Parsing de la réponce
+    query = response_pseudo.json()
+    return query
+
 def Riot_Get_Username(id):
     #URL pour avoir les informations sur le pseudo
     url = str(parser.get('riot_url', 'url_id_summoner'))+str(id)
@@ -92,3 +99,10 @@ def findChampionWithId(id:int):
     for champion in data['data']:
         if(data['data'][champion]['key']==str(119)):
             return champion
+        
+def Riot_Get_Last_Ranked(id):
+    PARAMS["queue"] = 420
+    url = str(parser.get('riot_url', 'url_history'))+str(id)+"/ids"
+    response = requests.get(url = url, params = PARAMS)
+    query = response.json()
+    return query

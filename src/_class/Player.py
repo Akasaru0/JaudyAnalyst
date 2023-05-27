@@ -2,23 +2,23 @@ class Player:
     """
     Elle représente les données de fin de games pour un joueur
     """
-    def __init__(self,dataJson:dict,gameDuration:int):
+    def __init__(self,dataEndJson:dict,dataTimeJson:dict,gameDuration:int):
 
-        self.id = dataJson['puuid']
-        self.setSummonerName(dataJson['summonerName'])   
-        self.setPosition(dataJson['lane'],dataJson['individualPosition'])
-        self.setChampion(dataJson['championName'],dataJson['champLevel'],dataJson['champExperience'])
-        self.setKDA(dataJson['kills'],dataJson['deaths'],dataJson['assists'])
-        self.setDamagesObjectif(dataJson['damageDealtToObjectives'])
-        self.setDamagesTurret(dataJson['damageDealtToTurrets'])
-        self.setTotalDamaged(dataJson['totalDamageDealtToChampions'],dataJson['totalDamageTaken'])
-        self.setWards(dataJson['wardsPlaced'],dataJson['wardsKilled'],dataJson['visionWardsBoughtInGame'],dataJson['detectorWardsPlaced'])
-        self.setVisionScore(dataJson['visionScore'],gameDuration)
-        self.setGold(dataJson['goldEarned'],dataJson['goldSpent'])
-        self.setTotalCreep(dataJson['totalMinionsKilled'],dataJson['neutralMinionsKilled'])
-        self.setKillParticipation(dataJson['challenges']['killParticipation'])
+        self.id = dataEndJson['puuid']
+        self.setSummonerName(dataEndJson['summonerName'])   
+        self.setPosition(dataEndJson['lane'],dataEndJson['individualPosition'])
+        self.setChampion(dataEndJson['championName'],dataEndJson['champLevel'],dataEndJson['champExperience'])
+        self.setKDA(dataEndJson['kills'],dataEndJson['deaths'],dataEndJson['assists'])
+        self.setDamagesObjectif(dataEndJson['damageDealtToObjectives'])
+        self.setDamagesTurret(dataEndJson['damageDealtToTurrets'])
+        self.setTotalDamaged(dataEndJson['totalDamageDealtToChampions'],dataEndJson['totalDamageTaken'])
+        self.setWards(dataEndJson['wardsPlaced'],dataEndJson['wardsKilled'],dataEndJson['visionWardsBoughtInGame'],dataEndJson['detectorWardsPlaced'])
+        self.setVisionScore(dataEndJson['visionScore'],gameDuration)
+        self.setGold(dataEndJson['goldEarned'],dataEndJson['goldSpent'])
+        self.setTotalCreep(dataEndJson['totalMinionsKilled'],dataEndJson['neutralMinionsKilled'])
+        self.setKillParticipation(dataEndJson['challenges']['killParticipation'])
         self.setCreepPerMin(gameDuration)
-        self.setDamagePerGold(dataJson['totalDamageDealtToChampions'],dataJson['goldSpent'])
+        self.setDamagePerGold(dataEndJson['totalDamageDealtToChampions'],dataEndJson['goldSpent'])
 
     
     def setSummonerName(self,summonerName:str):
@@ -102,6 +102,7 @@ class Player:
 
     def setDamagePerGold(self,totalDamageDealtToChampions:str,goldSpent:str):
         self.damagePerGold = format(totalDamageDealtToChampions/goldSpent,'.2f')
+
 
     def __str__(self):
         #fonction to string

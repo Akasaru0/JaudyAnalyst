@@ -16,7 +16,8 @@ class Game:
         self.gameID = gameID
 
         #Attribution de la date
-        date_time = datetime.datetime.fromtimestamp(data_end['gameCreation'])
+        unix_time = int(data_end['info']['gameCreation']/1000)
+        date_time = datetime.datetime.fromtimestamp(unix_time)
         self.date = date_time.strftime('%Y-%m-%d %H:%M:%S')
         
         #Attribution de la durée de la game en seconde
@@ -29,7 +30,7 @@ class Game:
         for i in range(0,10):
             data_end_json = data_end['info']['participants'][i]
             #print(PlayerEnd(dataJson,self.gameDuration))
-            self.player.append(Player(data_end_json,self.gameDuration))     
+            self.player.append(Player(data_end_json,data_time,self.gameDuration))     
 
         #Attribution des noms de team
         if (teamBlue != None and teamRed != None):
