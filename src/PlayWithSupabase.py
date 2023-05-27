@@ -215,3 +215,14 @@ def add_value_supabase_soloQ(game,id,puuid):
                 data['enemy_gold_spend'] = player.goldSpent
                 data['enemy_damage_gold'] = player.damagePerGold
     supabase_soloQ.table('soloq').insert(data).execute()
+
+def init_supabase_soloQ(players):
+    for i in range(0,len(players)):
+        # Construire la requête SELECT
+        try:
+            query = supabase_soloQ.table('soloq').select('id').eq('player', ''+players[i]['pseudo']).order('date', desc=True)
+            # Exécuter la requête
+            response = query.execute()
+            players[i]["last_game"] = response.data[0]["id"]
+        except:
+            players[i]["last_game"] = 0

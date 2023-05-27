@@ -22,45 +22,46 @@ class Game:
         
         #Attribution de la durée de la game en seconde
         self.gameDuration = int(data_end['info']['gameDuration'])
+        if self.gameDuration > 600:
 
-        #Variable du tableau de joueur
-        self.player = []
+            #Variable du tableau de joueur
+            self.player = []
 
-        #Attribution des joueurs dans la game.
-        for i in range(0,10):
-            data_end_json = data_end['info']['participants'][i]
-            #print(PlayerEnd(dataJson,self.gameDuration))
-            self.player.append(Player(data_end_json,data_time,self.gameDuration))     
+            #Attribution des joueurs dans la game.
+            for i in range(0,10):
+                data_end_json = data_end['info']['participants'][i]
+                #print(PlayerEnd(dataJson,self.gameDuration))
+                self.player.append(Player(data_end_json,data_time,self.gameDuration))     
 
-        #Attribution des noms de team
-        if (teamBlue != None and teamRed != None):
-            self.teamBlue = teamBlue
-            self.teamRed = teamRed
-        else:
-            self.teamBlue = None
-            self.teamRed = None
-        
-        self.recupKDATotaux()
-        self.recupDamagesTotaux()
+            #Attribution des noms de team
+            if (teamBlue != None and teamRed != None):
+                self.teamBlue = teamBlue
+                self.teamRed = teamRed
+            else:
+                self.teamBlue = None
+                self.teamRed = None
+            
+            self.recupKDATotaux()
+            self.recupDamagesTotaux()
 
-        # Récupération de la variable win
-        if data_end["info"]['teams'][0]["win"]:
-            self.win = "B"
-        else:
-            self.win = "R"
+            # Récupération de la variable win
+            if data_end["info"]['teams'][0]["win"]:
+                self.win = "B"
+            else:
+                self.win = "R"
 
-        # Récupération du frist blood
-        if data_end["info"]['teams'][0]["objectives"]["champion"]["first"]:
-            self.firstblood_blue = True
-            self.firstblood_red = False
-        else:
-            self.firstblood_blue = False
-            self.firstblood_red = True
-        
-        self.recup_bans_team(data_end["info"]["teams"])
-        self.set_kill_position(data_time)
-        # for i in range(0,len(self.kills)):
-        #     print(self.kills[i])
+            # Récupération du frist blood
+            if data_end["info"]['teams'][0]["objectives"]["champion"]["first"]:
+                self.firstblood_blue = True
+                self.firstblood_red = False
+            else:
+                self.firstblood_blue = False
+                self.firstblood_red = True
+            
+            self.recup_bans_team(data_end["info"]["teams"])
+            self.set_kill_position(data_time)
+            # for i in range(0,len(self.kills)):
+            #     print(self.kills[i])
     
     #Fonction de création d'object kill.
     def set_kill_position(self,dataJson):
