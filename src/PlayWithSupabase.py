@@ -119,7 +119,7 @@ def add_value_supabase(game):
 # data = supabase.table("games").insert({'id':123121412}).execute()
 # print(data)
 
-def add_value_supabase_soloQ(game,id,puuid):
+def add_value_supabase_soloQ(game,id,puuid,name):
     data_account = Riot_Get_Rank(id)
     rank = {
         'IRON' :  0,
@@ -153,7 +153,7 @@ def add_value_supabase_soloQ(game,id,puuid):
             elif game.win == "R":
                     data['win'] = 'W'
             position_player = player.individualPosition
-            data['player'] = player.summonerName
+            data['player'] = name
             data['position'] = player.individualPosition
             data["player_champion"] = player.championName
             data['player_level'] = player.lvl
@@ -220,7 +220,7 @@ def init_supabase_soloQ(players):
     for i in range(0,len(players)):
         # Construire la requête SELECT
         try:
-            query = supabase_soloQ.table('soloq').select('id').eq('player', ''+players[i]['pseudo']).order('date', desc=True)
+            query = supabase_soloQ.table('soloq').select('id').eq('player', ''+players[i]['name']).order('date', desc=True)
             # Exécuter la requête
             response = query.execute()
             players[i]["last_game"] = response.data[0]["id"]

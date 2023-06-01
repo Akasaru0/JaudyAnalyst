@@ -74,7 +74,7 @@ def Riot_Get_UserId(username):
     response_pseudo = requests.get(url = url, params = PARAMS)
     #Parsing de la réponce
     query_pseudo = response_pseudo.json()
-    return query_pseudo['puuid']
+    return query_pseudo
 
 def Riot_Get_Rank(id):
     url = str(parser.get('riot_url', 'url_id_rank'))+str(id)
@@ -89,7 +89,7 @@ def Riot_Get_Username(id):
     response_summoner = requests.get(url = url, params = PARAMS)
     #Parsing de la réponce
     query_summoner = response_summoner.json()
-    return query_summoner[0]['summonerName']
+    return query_summoner
 
 def findChampionWithId(id:int):
     responce_version = requests.get(url = str(parser.get('url', 'url_version')))

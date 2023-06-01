@@ -1,72 +1,72 @@
-from _class.Player import *
 from _class.Game import *
-from _class.Daft import *
-from RiotAPI import *
-from DataAnalyse import *
 from PlayWithSupabase import *
-from DataAnalyse import *
 
 
-import datetime,time
+
+import json,time
 from supabase import create_client
 url = str(parser.get('supabase', 'SUPABASE_URL_SOLO'))
 key= str(parser.get('supabase', 'SUPABASE_KEY_SOLO'))
+
 supabase = create_client(url, key)
+
 
 psuedo = 'M6GU1rw0AwMPKcRlVjmF1Awa5yN8OC3K0qokHeUGVLapNeddyEWpiXmbZDpz6CjEkqqMdWbSWRGFVA'
 id_player = 'LAT6RUfQ_Xqhqgp0h0N5j4FRZ3lWN8a_cZn1R5_vDjkFU4M'
 
+def add_player_to_soloQ(username):
+    query_riot = Riot_Get_UserId(username)
+    if "id" in query_riot:
+        print(json.dumps(query_riot, indent=4))
 
-players = [
+    else:
+        print('Le pseudo n\'existe pas')
+
+players=[
     {
-        'pseudo' : "Tomu",
-        "id" : "LAT6RUfQ_Xqhqgp0h0N5j4FRZ3lWN8a_cZn1R5_vDjkFU4M",
-        "puuid" : 'M6GU1rw0AwMPKcRlVjmF1Awa5yN8OC3K0qokHeUGVLapNeddyEWpiXmbZDpz6CjEkqqMdWbSWRGFVA',
-        "last_game" : 0
-    },
-    {
-        'pseudo' : "BL Levi",
-        "id" : "NSFdyalgCoCcy5ZWTiPk-hwHQ4Ydb8wfEidb5iRplTBJxhU",
-        "puuid" : 'N1OSZ7PwrW3el3BvahXy8wTRERjJNpxzb0XvuTFdUvZRVaDib_nA8PmKrarL3N0eDCglr0wn3ch8Gw',
-        "last_game" : 0
+        "id": "aRabKKX2ytT022E-Oq2H_OD2W82HfwZ6Ufv1OXKyNzCR34w",
+        "accountId": "qWhf9l0jNT-t8ya1rt6ZlXN_3MDak_LmIye3KnGPfiA5mww",
+        "puuid": "oEEHBRQ_agUnMxOsYGktLoqE6-R9LUoBeiM5ZSCyszDjFWuRQUzncCuCtDCXUZU2ulFrF61tfx1kJg",
+        "name": "Tomu"
     },
     {
-        'pseudo' : "BL YMZ",
-        "id" : "Hhy1MJCM3R9WTGPOT5h5vjacLWbPQv5YnIl7wkUT96nI3OI",
-        "puuid" : '4XIfntsM2BzQ3RI3PAwKg8aBgeLe3HG4jGexRjL3aekY7ytGkB4JHEiFVtaXT9QyA3h_pkNaXhDS7g',
-        "last_game" : 0
+        "id": "03hTWYOmRhynDloJuDOXs0bKizO8ewImK0l455npS0mOWlw",
+        "accountId": "S6z6nQ4fBOFT6652Whntm7x1Gjx8BbgEbUeiREGRx01uKqc",
+        "puuid": "x0gU9mSsU4AcL4Au9GEfrZhSeqVWr_gIEZu53Hc45zuGO2XvFbcuA1_hfJuC3rcVT5fwUX86o8lnOw",
+        "name": "BL Levi"
     },
     {
-        'pseudo' : 'BL Héraclèss',
-        "id" : "mhBoh_HRjK4GxdOOqxvLYZczBeS8nekHy7fzZskNdyAx3zg",
-        "puuid" : 'hh5RproKBBe7wO-InOX8t3LhxxIsb8K2l7pcorNTUXnZRGzO6N_OEbNy0uROr26Zkic0Q-vpl5n0qw',
-        "last_game" : 0
+        "id": "kg46_9UTo5eXEtAUNFeBGTYI0qserfzdNmJ1o9xg0aFJT6I",
+        "accountId": "Wg5Xn-330Yist0wfSw2AdhQpiSSTcSfgsJ5doaSV7-t9So0",
+        "puuid": "emAo8MC2aKdBYFCIxB-Kj-5ZH7FEdnl1c_qp_Qc-GN7Padfr1akf1QsiaaqKIKfXnUPY-sHqfsPw6Q",
+        "name": "BL YMZ"
     },
     {
-        'pseudo' : 'BL ZNK',
-        "id" : "AwGyaW7brYNo2gTFhhAEKf1-MIyeYCrrqMzBjxcz5i_NNqsHPF7q3gpd9g",
-        "puuid" : 'G0XNd7SGMVsQW0tK-5r0zVSjLjhcMnKhidVwdnuPaNXALATt3RN2A0L7UW_8XkbK4ED2ded31WS_LA',
-        "last_game" : 0
+        "id": "pyNOujiPvaweUcI11AHzRNUaN0Va5HT_JJ-BWFsErTMrE6E",
+        "accountId": "sS16jgGtclbPzKCeUSXFcT--2RJ_Jc5PdXbUIBDiUsfCmg",
+        "puuid": "vjVnfmc0-6j9aTdISGhXgfBkl0o1I9IsNX8x62ovMRp3H7dDfVC9ItOwaCjNxdedmk2V7mcbYDmGVg",
+        "name": "BL Héraclèss"
     },
-       {
-        'pseudo' : 'Lvittanatt',
-        "id" : "opqdkZ0QFLIvdM3c65cQp8_J7AzWOQj1uAuYxusAyFKQO4FESdGpOX4Dqw",
-        "puuid" : 'SwbPU3mr9d53Z3Z2S7kRXEzDpTRyEvydTqnQC4hSAscqhudRwEd4_Ax5fJT-jqS0mXLy9qGihA1cXA',
-        "last_game" : 0
-    },
+    {
+        "id": "4FfHlR8IFEMUkRo2-FmgzcWVOoA3bYY5mFIszeVDuccwk3cVmWsiW8g38Q",      
+        "accountId": "DyX4EmQYUxx1OJBpmZamWgEKXDELSrjaGhnXAMhU0qVuCBR9rhTwsHeA", 
+        "puuid": "yflSAx6zN9xTJ-4t_EOHzuNIxg1r2JYSer8f12eCHcZRyET8X9f8wNwYu0xdg-0Zdut2Fa1iWTJRDA",
+        "name": "BL ZNK"
+    }
 ]
 
+print("INIT")
+init_supabase_soloQ(players)
 while(1):
-    print("INIT")
-    init_supabase_soloQ(players)
     print("New Scan")
     for i in range(0,len(players)):
         history = Riot_Get_Last_Ranked(players[i]['puuid'])
+        #print(history)
         if(int(history[0].split('_')[1]) != int(players[i]["last_game"])):
             game = Game(history[0].split('_')[1])
             if int(game.gameDuration) > 600:
-                print('NEW game for '+players[i]["pseudo"]+":"+history[0].split('_')[1])
-                add_value_supabase_soloQ(game,players[i]['id'],players[i]['puuid'])
+                print('NEW game for '+players[i]["name"]+":"+history[0].split('_')[1])
+                add_value_supabase_soloQ(game,players[i]['id'],players[i]['puuid'],players[i]['name'])
             players[i]['last_game']=history[0].split('_')[1]
     print("Scan Finished")
     time.sleep(300)
