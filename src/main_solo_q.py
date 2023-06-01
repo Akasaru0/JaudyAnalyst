@@ -2,7 +2,7 @@ from _class.Game import *
 from PlayWithSupabase import *
 
 
-
+from datetime import datetime
 import json,time
 from supabase import create_client
 url = str(parser.get('supabase', 'SUPABASE_URL_SOLO'))
@@ -55,18 +55,30 @@ players=[
     }
 ]
 
+def log():
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    return dt_string + " : "
+
 print("INIT")
 init_supabase_soloQ(players)
 while(1):
-    print("New Scan")
+    print(log()+"New Scan")
+    compteur = 0
     for i in range(0,len(players)):
         history = Riot_Get_Last_Ranked(players[i]['puuid'])
         #print(history)
         if(int(history[0].split('_')[1]) != int(players[i]["last_game"])):
             game = Game(history[0].split('_')[1])
             if int(game.gameDuration) > 600:
-                print('NEW game for '+players[i]["name"]+":"+history[0].split('_')[1])
+                print(log()+'NEW game for '+players[i]["name"]+":"+history[0].split('_')[1])
                 add_value_supabase_soloQ(game,players[i]['id'],players[i]['puuid'],players[i]['name'])
             players[i]['last_game']=history[0].split('_')[1]
-    print("Scan Finished")
-    time.sleep(300)
+        if compteur>= 15:
+            print(log()+"Too many request, waiting for 1min")
+            time.sleep(60) 
+        if i == (len(players)-1):
+            print(log()+"Player List finished")
+            time.sleep(60)
+    print(log()+"Scan Finished")
+

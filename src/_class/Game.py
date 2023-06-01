@@ -1,6 +1,6 @@
 from RiotAPI import Riot_Extract_Data_End_Game , Riot_Extract_Timeline_Game
 from _class.Player import Player
-from _class.Kills import Kill
+#from _class.Kills import Kill
 import requests,datetime
 
 class Game:
@@ -59,7 +59,7 @@ class Game:
                 self.firstblood_red = True
             
             self.recup_bans_team(data_end["info"]["teams"])
-            self.set_kill_position(data_time)
+            #self.set_kill_position(data_time)
             # for i in range(0,len(self.kills)):
             #     print(self.kills[i])
     
