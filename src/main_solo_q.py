@@ -76,9 +76,11 @@ while(1):
             players[i]['last_game']=history[0].split('_')[1]
         if compteur>= 15:
             print(log()+"Too many request, waiting for 1min")
+            compteur = 0
             time.sleep(60) 
         if i == (len(players)-1):
             print(log()+"Player List finished")
             time.sleep(60)
+        compteur = compteur+1
     print(log()+"Scan Finished")
 
