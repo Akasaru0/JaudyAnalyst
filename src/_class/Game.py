@@ -181,7 +181,7 @@ class Game:
                 #Set the Damage of the player
                 line = line+';'+str(player.totalDamageDealtToChampions)+';'+str(player.totalDamageTaken)+';'+str(player.damageDealtToObjectives)+';'+str(player.damageDealtToTurrets)
                 #Set the Farming
-                line = line+';'+str(player.totalCreepKilled)+';'+str(player.neutralMinionsKilled)+';'+str(player.totalMinionsKilled)+';'+str(player.creepPerMin)
+                line = line+';'+str(player.totalCreepKilled)+';'+str(player.neutralMinionsKilled)+';'+str(player.totalMinionsKilled)+';'+str(player.avgcreep)
                 #Set the Vision
                 line = line+';'+str(player.wardsPlaced)+';'+str(player.wardsKilled)+';'+str(player.visionWardsBoughtInGame)+';'+str(player.detectorWardsPlaced)+';'+str(player.visionScore)+';'+str(player.visionScorePerMin)
                 #Set the gold

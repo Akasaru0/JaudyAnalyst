@@ -17,9 +17,9 @@ class Player:
         self.setGold(dataEndJson['goldEarned'],dataEndJson['goldSpent'])
         self.setTotalCreep(dataEndJson['totalMinionsKilled'],dataEndJson['neutralMinionsKilled'])
         self.setKillParticipation(dataEndJson['challenges']['killParticipation'])
-        self.setCreepPerMin(gameDuration)
+        self.setAvgCreep(gameDuration)
         self.setDamagePerGold(dataEndJson['totalDamageDealtToChampions'],dataEndJson['goldSpent'])
-
+        self.setVariablePerMin(dataTimeJson)
     
     def setSummonerName(self,summonerName:str):
         #Attribution du nom d'invocateur
@@ -96,12 +96,37 @@ class Player:
         #Attribution des valeurs de kill participation
         self.killParticipation = format(killParticipation, '.4f')
 
-    def setCreepPerMin(self,gameDuration:int):
+    def setAvgCreep(self,gameDuration:int):
         #Attribution des valeurs de kill participation
-        self.creepPerMin = format(60*self.totalCreepKilled/gameDuration, '.1f')
+        self.avgcreep = format(60*self.totalCreepKilled/gameDuration, '.1f')
 
     def setDamagePerGold(self,totalDamageDealtToChampions:str,goldSpent:str):
         self.damagePerGold = format(totalDamageDealtToChampions/goldSpent,'.2f')
+
+    def setVariablePerMin(self,dataTimeJson):
+        #Set participant int
+        int_paticipant = ''
+        self.totalGoldPerMin = []
+        self.totalCreepPerMin = []
+
+        for i in range(0,len(dataTimeJson["metadata"]["participants"])):
+            if dataTimeJson["metadata"]["participants"][i] == self.id:
+                int_paticipant = str(i+1)
+                print(int_paticipant)
+                print(dataTimeJson["metadata"]["participants"][i])
+                print(self.id)
+  
+        
+        for i in range(0,len(dataTimeJson["info"]["frames"])):
+            if i != 0:
+                self.totalGoldPerMin.append(format(int(dataTimeJson["info"]['frames'][i]["participantFrames"][int_paticipant]["totalGold"]/i), '.0f'))
+                self.totalCreepPerMin.append(format(int(dataTimeJson["info"]['frames'][i]["participantFrames"][int_paticipant]["minionsKilled"]+dataTimeJson["info"]['frames'][i]["participantFrames"][int_paticipant]["jungleMinionsKilled"])/i, '.1f'))
+            else:
+                self.totalGoldPerMin.append(format(int(dataTimeJson["info"]['frames'][i]["participantFrames"][int_paticipant]["totalGold"]), '.0f'))
+                self.totalCreepPerMin.append(format(int(dataTimeJson["info"]['frames'][i]["participantFrames"][int_paticipant]["minionsKilled"]+dataTimeJson["info"]['frames'][i]["participantFrames"][int_paticipant]["jungleMinionsKilled"]), '.1f'))
+        print(self.totalGoldPerMin)
+        print(self.totalCreepPerMin)
+        print("-----------------------")
 
 
     def __str__(self):

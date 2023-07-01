@@ -102,7 +102,7 @@ def add_value_supabase(game):
         data['creep'] = player.totalCreepKilled
         data['sbire'] = player.neutralMinionsKilled
         data['jungle_sbire'] = player.totalMinionsKilled
-        data['creep_min'] = player.creepPerMin
+        data['creep_min'] = player.avgcreep
 
         data['ward_placed'] = player.wardsPlaced
         data['ward_killed'] = player.wardsKilled
@@ -140,9 +140,13 @@ def add_value_supabase_soloQ(game,id,puuid,name):
     lp= 0
     for i in range(0,len(data_account)):
         if data_account[i]['queueType'] == 'RANKED_SOLO_5x5':
-            lp = int(rank[data_account[i]['tier']]) + int(Div[data_account[i]['rank']]) +int(data_account[i]['leaguePoints'])
-
+            if data_account[i]["tier"] == 'MASTER':
+                lp = int(rank[data_account[i]['tier']]) +int(data_account[i]['leaguePoints'])
+            else:
+                lp = int(rank[data_account[i]['tier']]) + int(Div[data_account[i]['rank']]) +int(data_account[i]['leaguePoints'])
+                
     data = {'id':int(game.gameID),'date':game.date,'lp':lp,'win':'L'}
+    data_time = {'id':int(game.gameID)}
     position_player = ''
     for i in range(0,10):
         player = game.player[i]
@@ -170,7 +174,7 @@ def add_value_supabase_soloQ(game,id,puuid,name):
             data['player_creep'] = player.totalCreepKilled
             data['player_sbire'] = player.neutralMinionsKilled
             data['player_jungle_sbire'] = player.totalMinionsKilled
-            data['player_creep_min'] = player.creepPerMin
+            data['player_creep_min'] = player.avgcreep
 
             data['player_ward_placed'] = player.wardsPlaced
             data['player_ward_killed'] = player.wardsKilled
@@ -182,6 +186,19 @@ def add_value_supabase_soloQ(game,id,puuid,name):
             data['player_gold_earn'] = player.goldEarned
             data['player_gold_spend'] = player.goldSpent
             data['player_damage_gold'] = player.damagePerGold
+
+            for k in range(0,len(player.totalGoldPerMin)):
+                data_time["player"] = name
+                data_time["value"] = player.totalGoldPerMin[k]
+                data_time["time"] = k
+                data_time["variable"] = "Gold/Min"
+                supabase_soloQ.table('soloq_time').insert(data_time).execute()
+                
+                data_time["player"] = name
+                data_time["value"] = player.totalCreepPerMin[k]
+                data_time["time"] = k
+                data_time["variable"] = "Creep/Min"
+                supabase_soloQ.table('soloq_time').insert(data_time).execute()
 
     for i in range(0,10):
         player = game.player[i]
@@ -202,7 +219,7 @@ def add_value_supabase_soloQ(game,id,puuid,name):
                 data['enemy_creep'] = player.totalCreepKilled
                 data['enemy_sbire'] = player.neutralMinionsKilled
                 data['enemy_jungle_sbire'] = player.totalMinionsKilled
-                data['enemy_creep_min'] = player.creepPerMin
+                data['enemy_creep_min'] = player.avgcreep
 
                 data['enemy_ward_placed'] = player.wardsPlaced
                 data['enemy_ward_killed'] = player.wardsKilled
@@ -214,7 +231,11 @@ def add_value_supabase_soloQ(game,id,puuid,name):
                 data['enemy_gold_earn'] = player.goldEarned
                 data['enemy_gold_spend'] = player.goldSpent
                 data['enemy_damage_gold'] = player.damagePerGold
+    
     supabase_soloQ.table('soloq').insert(data).execute()
+
+
+
 
 def init_supabase_soloQ(players):
     for i in range(0,len(players)):
